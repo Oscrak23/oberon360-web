@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./asistenciaStyle.css";
-import AsistenciaImg from "../../assets/img/img-asistencia/backgroundAsis.png";
-import Logoimg from "../../assets/img/img-asistencia/TSI.png";
 import Llamadas from "../../assets/img/img-asistencia/llamadas.png";
-import { IAsistencia } from "../../models/asistencia.model";
+import type { IAsistencia } from "../../models/asistencia.model";
 import { useConections } from "../../context/conexionesprovider";
+import AsistenciaLayout from '@/layouts/Asistencia/asistenciaLayout';
 
 // export default function () {
 //   const { ubicaciones, getUbicaciones } = useConections();
@@ -12,8 +11,8 @@ import { useConections } from "../../context/conexionesprovider";
 //     getUbicaciones();
 //   }, [getUbicaciones, ubicaciones]);
 
-export default function () {
-  const { asistencia, fAsistencia } = useConections() as any;
+export default function Asistencia() {
+  const { asistencia, fAsistencia } = useConections()
 
   const itemsPerPage = 5;
   const [itemsShows, setItemsShows] = useState<IAsistencia[]>([]);
@@ -30,25 +29,12 @@ export default function () {
     handleSetPage(0);
   }, [fAsistencia, asistencia]);
 
-  const handleLlamar = (datos: any) => {
+  const handleLlamar = () => {
     alert("se esta llamando al colaborador (:");
   };
   return (
-    <div className="">
-      <div>
-        <img className="prueb" src={AsistenciaImg} />
-        <div className="contenedorTitulo">
-          <text className="titulo"> CONTROL DE ASISTENCIA</text>
-          <div style={{ position: "relative" }}>
-            <div className="LineaCss"></div>
-            <div className="PuntosLinea"></div>
-            <div className="PuntosLinea PuntosFInLinea"></div>
-          </div>
-        </div>
-        <div className="logoimg">
-          <img className="logoTsi" src={Logoimg} />
-        </div>
-      </div>
+    <AsistenciaLayout>
+
       <div className="table-responsive-xl contendorTable">
         <table className="table table-sm table-striped  table-hover">
           <thead className="tableHeader">
@@ -145,6 +131,7 @@ export default function () {
           </tfoot>
         </table>
       </div>
-    </div>
+    </AsistenciaLayout>
+
   );
 }

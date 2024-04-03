@@ -20,9 +20,9 @@ export default function IndicadorFiltro() {
         <table className="table table-striped ">
           <thead>
             <tr>
-              <th>clasificacion de riezgos</th>
-              <th>estado</th>
-              <th>datos tickets</th>
+              <th>CLASIFICACIÓN DE RIESGO</th>
+              <th>ESTADO</th>
+              <th>DATOS TICKETS</th>
             </tr>
           </thead>
         </table>

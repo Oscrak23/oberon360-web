@@ -1,21 +1,23 @@
-import React, { useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import "../FormularioLogin/formularioStyle.css";
 import usuLogo from "../../assets/img/login/ICONO-USUARIO-GRANDE.png";
 import inputLogo from "../../assets/img/login/CUADRO-USUARIO.png";
 import passwordLogo from "../../assets/img/login/CUADRO-CONTRASEÑA.png";
 import { useNavigate } from "react-router-dom";
-import { useConections } from "../../context/conexionesprovider";
+import { login } from "../../api/conexiones.api";
+import { toast } from "react-toastify";
+import { useLoginStore } from "@/states/Login.state";
+import { verifyJWT } from "@/tools";
 
-export default function Formulario({ setCargando }: any) {
+export default function Formulario({ setCargando }: { setCargando: (b: boolean) => void }) {
   const navigate = useNavigate();
-  const { getLogin } = useConections() as any;
-  // const { login } = useContext(LoginContext);
-  const [usuario, setUsuario] = useState("");
+  const { setToken, setUser } = useLoginStore()
+  const [userForm, setUserForm] = useState("");
   const [password, setPassword] = useState("");
   const [mostrarPassword, setMostrarPassword] = useState(false);
 
   const handleUsuarioChange = (event: any) => {
-    setUsuario(event.target.value);
+    setUserForm(event.target.value);
   };
 
   const handlePasswordChange = (event: any) => {
@@ -24,15 +26,20 @@ export default function Formulario({ setCargando }: any) {
 
   const onClickLogin = async () => {
     setCargando(true);
-    const respuesta = await getLogin(usuario, password);
-    setCargando(false);
-    if (respuesta.data.error === "0") {
-      // login(usuario);
-      // navigate('/asistencia');
+    try {
+      const respuesta = await login({ user: userForm, password });
+      console.log(respuesta);
+      setUser(userForm);
+      setToken(respuesta.data.token);
+      localStorage.setItem("token", respuesta.data.token);
       navigate("/mapa");
-    } else {
-      alert("Error de usuario");
+
+    } catch (error: any) {
+      toast.error(error.response.data.message, { autoClose: 5000 })
+      console.log(error);
+
     }
+    setCargando(false);
   };
 
   const MostrarPass = () => {
@@ -44,6 +51,21 @@ export default function Formulario({ setCargando }: any) {
       onClickLogin();
     }
   };
+
+  const verifyToken = async (token: string) => {
+    const data = await verifyJWT(token)
+    console.log(data);
+    if (data !== false) {
+      navigate("/mapa")
+    }
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      verifyToken(token)
+    }
+  }, [])
 
   return (
     <div className="contenedor_formulario">

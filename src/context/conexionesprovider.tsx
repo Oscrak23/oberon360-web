@@ -1,6 +1,6 @@
 import { useContext, createContext, useState } from "react";
 import {
-  conections,
+  login,
   UbicacionesClientes,
   getAsistencia,
 } from "../api/conexiones.api";
@@ -27,7 +27,7 @@ export const ConexionesContextProvider = ({ children }: any) => {
         user: user,
         password: password,
       };
-      const response = await conections(bodyreq);
+      const response = await login(bodyreq);
       return response;
     } catch (error) {
       console.error(error);
