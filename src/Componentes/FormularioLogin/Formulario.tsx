@@ -72,8 +72,11 @@ export default function Formulario({ setCargando }: { setCargando: (b: boolean) 
       <img className="usuLogo" src={usuLogo} alt="Usuario Logo" />
       <form>
         <div className="ContainerUsuText">
+          <label htmlFor="user">Usuario</label>
+
           <img className="ImgUsuText" src={inputLogo} alt="Input Logo" />
           <input
+            id="user"
             className="ImgUsuText InputText"
             onChange={handleUsuarioChange}
             type="text"
@@ -81,8 +84,10 @@ export default function Formulario({ setCargando }: { setCargando: (b: boolean) 
           />
         </div>
         <div className="ContainerUsuText ConetenedorContrasena">
+          <label htmlFor="pass">Contraseña</label>
           <img className="ImgUsuText" src={passwordLogo} alt="Password Logo" />
           <input
+            id="pass"
             className="ImgUsuText InputText TextPass"
             onChange={handlePasswordChange}
             type={mostrarPassword ? "text" : "password"}
