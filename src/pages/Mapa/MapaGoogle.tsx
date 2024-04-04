@@ -19,10 +19,11 @@ import Notificaciones from "@components/Notificaciones/Notificaciones";
 import ZonaCalor from "@assets/img/MapaIconos/CIRCULO-RIESGOS.gif";
 
 import { VITE_GOOGLE_MAPS_API_KEY } from "@/config";
-import { UbicacionesClientes } from "@/api/conexiones.api";
+import { getClients, UbicacionesClientes } from "@/api/conexiones.api";
 import { useUbicaciones } from "@/states/Ubicaciones.state";
 import { containerStyle, Finca, FincaVIP, heatmapData, mapaDefecto, Mobile, Primaria, Secundaria, Ticket } from "@/data/mapaData";
-import ubicacionesJson from "@/data/ubicaciones";
+import type { IClienteResponse, IUbicacionCliente } from "@/models/ubicaciones.model";
+import { darkMapStyles } from '../../data/mapaData';
 
 function MapaGoogle() {
   const [center, setCenter] = useState({
@@ -33,7 +34,21 @@ function MapaGoogle() {
   const [map, setMap] = useState<null | any>(null);
   const { ubicaciones, setUbicaciones } = useUbicaciones()
   const mapRef = useRef() as any;
-  const [selectedMarker, setSelectedMarker] = useState<null | any>(null);
+  const [selectedMarker, setSelectedMarker] = useState<null | IUbicacionCliente>(null);
+  const [clientes, setClientes] = useState<IClienteResponse[]>([
+    {
+      CLIE_ID_REG: "34",
+      CLIE_COMERCIAL: "ALPINA"
+    }
+  ]);
+  const [clienteSelected, setClienteSelected] = useState<null | IClienteResponse>(null);
+
+  const handleClienteChange = (cliente: IClienteResponse) => {
+    setClienteSelected(cliente);
+    const ubicacionesFilter = ubicaciones.filter((ubicacion) => ubicacion.CLIUBIC_ID_CLIENTE === cliente.CLIE_ID_REG);
+    setUbicaciones(ubicacionesFilter);
+    console.log(cliente);
+  }
 
   const handleMarkerClick = (marker: any) => {
     console.log(marker);
@@ -50,19 +65,17 @@ function MapaGoogle() {
     setMap(map);
   }, []);
 
-
-  //promise ubicaciones
-
-  const getUbicaciones = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(ubicacionesJson);
-    }, 1500);
-  });
-
   const getData = async () => {
     const response = await UbicacionesClientes();
     console.log(response);
     setUbicaciones(response.data);
+    const responseClient = await getClients()
+    console.log(responseClient);
+    const clientes = [{
+      CLIE_ID_REG: "34",
+      CLIE_COMERCIAL: "ALPINA"
+    }, ...responseClient.data.data]
+    setClientes(clientes);
   }
 
   useEffect(() => {
@@ -70,15 +83,9 @@ function MapaGoogle() {
       map.setZoom(zoomi);
     }
     getData();
-    // getUbicaciones.then((data: any) => {
-    //   // console.log(data);
-    //   setUbicaciones(data);
-    // });
-    // setUbicaciones(ubicacionesJson);
   }, []);
-  useEffect(() => { }, [ubicacionesJson])
 
-  const [mostrarVehiculos, setMostrarVehiculos] = useState(true);
+  useEffect(() => { }, [ubicaciones])
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -95,10 +102,10 @@ function MapaGoogle() {
     <>
       <Notificaciones />
       <LateralFiltroMapa
-        mostrarVehiculos={mostrarVehiculos}
-        setMostrarVehiculos={setMostrarVehiculos}
+        clientes={clientes}
+        setCliente={handleClienteChange}
       />
-      <EtiquetaLateralLogoCli />
+      <EtiquetaLateralLogoCli cliente={clienteSelected} />
       <GoogleMap
         onLoad={onLoad}
         mapContainerStyle={containerStyle}
@@ -114,7 +121,7 @@ function MapaGoogle() {
           }
         }}
         options={{
-          styles: mapaDefecto,
+          styles: darkMapStyles,
           //darkMapStyles       mapaDefecto
           disableDefaultUI: true,
           zoomControl: true,
@@ -131,11 +138,11 @@ function MapaGoogle() {
             averageCenter 
           > */}
           {/* {(clusterer) => */}
-          {mostrarVehiculos &&
-            ubicaciones.map((coordenada) => (
+          {
+            ubicaciones.map((coordenada, index) => (
               <div className="icono">
                 <Marker
-                  key={coordenada.ID}
+                  key={index}
                   position={{
                     lat: Number.parseFloat(coordenada.CLIUBIC_LATITUD),
                     lng: Number.parseFloat(coordenada.CLIUBIC_LONGITUD),
@@ -194,23 +201,18 @@ function MapaGoogle() {
             <>
               <InfoWindow
                 position={{
-                  lat: Number.parseFloat(selectedMarker.Latitud),
-                  lng: Number.parseFloat(selectedMarker.Longitud),
+                  lat: Number.parseFloat(selectedMarker.CLIUBIC_LATITUD),
+                  lng: Number.parseFloat(selectedMarker.CLIUBIC_LONGITUD),
                 }}
                 onCloseClick={() => setSelectedMarker(null)}
               >
                 <div className="mapPopover" >
-                  <h3>Coordenadas:</h3>
-                  <p>Detalle: {selectedMarker.Detalle} </p>
-                  <p>
-                    A tiempo:{" "}
-                    {selectedMarker.TiempoFinal >= selectedMarker.hora_actual
-                      ? "Sí"
-                      : "No"}{" "}
-                  </p>
-                  <p>Latitud: {selectedMarker.Latitud}</p>
-                  <p>Longitud: {selectedMarker.Longitud}</p>
-                  <p>Hora programada: {selectedMarker.TiempoFinal}</p>
+                  <p>Ciente: <span>{selectedMarker.client.CLIE_COMERCIAL}</span></p>
+                  <p>Nombre: <span>{selectedMarker.CLIUBIC_NOMBRE}</span> </p>
+                  <p>Direccion: <span>{selectedMarker.CLIUBIC_DIRECCION}</span> </p>
+
+                  <p>Latitud: <span>{selectedMarker.CLIUBIC_LATITUD}</span> </p>
+                  <p>Longitud: <span>{selectedMarker.CLIUBIC_LONGITUD}</span> </p>
                 </div>
               </InfoWindow>
             </>

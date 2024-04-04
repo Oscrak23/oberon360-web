@@ -14,10 +14,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             if (tokenValid) {
                 setToken(token)
             } else {
-                // navigation("/")
+                navigation("/")
             }
         } else {
-            // navigation("/")
+            navigation("/")
         }
     }
 

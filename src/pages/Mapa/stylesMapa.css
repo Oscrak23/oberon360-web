@@ -16,8 +16,10 @@
     rgba(0, 82, 118, 1),
     rgba(16, 26, 50, 1)
   );
+  /* background-image: url("../../assets//img/VENTANA-EMERGENTE-.png"); */
+
   border-radius: 20px;
-  padding: 10px;
+  padding: 15px;
 }
 .gm-ui-hover-effect > span {
   background-color: #00c3de !important;
@@ -32,4 +34,19 @@
 }
 .icono div {
   box-shadow: red 10px 10px 20px;
+}
+.mapPopover {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.mapPopover p {
+  color: #00c3de;
+  font-size: 14px;
+  font-weight: bold;
+}
+.mapPopover p span {
+  color: #fff;
+  font-size: 12px;
+  font-weight: normal;
 }

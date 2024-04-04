@@ -154,3 +154,12 @@ export interface ICliente {
     CLIE_DIAS_ENTREGA: string;
     CLIE_COP: string;
 }
+
+// {
+//     "CLIE_ID_REG": "2",
+//     "CLIE_COMERCIAL": "EDIFICIO CAPITAL TOWER PH"
+// }
+export interface IClienteResponse {
+    CLIE_ID_REG: string;
+    CLIE_COMERCIAL: string;
+}

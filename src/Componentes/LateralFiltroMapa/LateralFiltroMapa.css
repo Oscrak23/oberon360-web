@@ -92,6 +92,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 3;
 }
 
 .oberon360 {
@@ -100,4 +101,70 @@
   right: 20px;
   width: 150px;
   z-index: 2;
+}
+.menu {
+  width: 100%;
+}
+.sub-menu {
+  display: none;
+  width: 100%;
+  padding: 10px;
+  border-radius: 15px;
+  margin-top: 10px;
+  max-height: 350px;
+  color: #00c3de;
+  animation: offVisible 0.5s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-size: 12px;
+}
+.menu::-webkit-scrollbar {
+  width: 20px;
+}
+
+.menu::-webkit-scrollbar-track {
+  background-color: black;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: #4e4e4e;
+  border-radius: 25px;
+}
+
+.sub-menu.visible {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  animation: onVisible 0.5s ease;
+}
+.sub-menu .btn-menu {
+  width: 100%;
+  margin: 5px 0;
+}
+.sub-menu-item {
+  padding: 10px;
+  border-bottom: 1px solid #00c3de;
+  cursor: pointer;
+}
+
+.sub-menu-item:hover {
+  transform: scale(1.1);
+  transition: 0.2s;
+}
+
+@keyframes onVisible {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes offVisible {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

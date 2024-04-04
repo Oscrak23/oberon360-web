@@ -5,28 +5,22 @@ import Ondas from "@assets/Recursos/ONDA-BARRA-LATERAL.svg"
 import "./LateralFiltroMapa.css";
 import oberon360 from "@assets/img/login/LOGO-OBERON-360-FIN.png"
 export default function LateralFiltroMapa({
-  mostrarVehiculos,
-  setMostrarVehiculos,
+  clientes, setCliente
 }: any) {
   const [filtroVisible, setFiltroVisible] = useState(false);
+  const [mostrarClientes, setMostrarClientes] = useState(false);
 
-  const filtro = () => {
-    setMostrarVehiculos(!mostrarVehiculos);
-  };
-
-  // const filtro = () => {
-  //     {filtroVisible ? setFiltroVisible(false):filtroVisible(true)}
-  //     console.log(filtroVisible);
-  //   };
-
-  //   function filtro () {
-  //     {filtroVisible ? setFiltroVisible(false):filtroVisible(true)}
-  //     console.log(filtroVisible);
-  //   };
+  const mostrarClientesFiltro = () => {
+    setMostrarClientes(!mostrarClientes);
+  }
 
   const toggleFiltro = () => {
     setFiltroVisible(!filtroVisible);
   };
+
+  const seleccionarCliente = (cliente: any) => {
+    setCliente(cliente);
+  }
 
   return (
     <div>
@@ -49,27 +43,37 @@ export default function LateralFiltroMapa({
           X
         </button>
         <div className="textMenu">
-          <button className="btn-menu">
-            Clientes
-          </button>
-          <button className="btn-menu">
+          <div className="menu">
+            <div className="btn-menu" onClick={() => mostrarClientesFiltro()} >
+              Clientes
+            </div>
+            <div className={`sub-menu ${mostrarClientes ? "visible" : ""}`}>
+              {clientes.map((item: any, index: number) => (
+                <div onClick={() => seleccionarCliente(item)} key={index} className="sub-menu-item">
+                  {item.CLIE_COMERCIAL}
+                </div>
+              ))
+              }
+            </div>
+          </div>
+          <div className="btn-menu">
             Control de asistencia
-          </button>
-          <button className="btn-menu">
+          </div>
+          <div className="btn-menu">
             Tecnología Inteligente
-          </button>
-          <button className="btn-menu">
+          </div>
+          <div className="btn-menu">
             Riesgos
-          </button>
-          <button className="btn-menu">
+          </div>
+          <div className="btn-menu">
             Operación
-          </button>
-          <button className="btn-menu">
+          </div>
+          <div className="btn-menu">
             Tickets
-          </button>
-          <button className="btn-menu">
+          </div>
+          <div className="btn-menu">
             Tableros de control
-          </button>
+          </div>
         </div>
       </div>
     </div>

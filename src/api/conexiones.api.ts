@@ -35,10 +35,16 @@ export const getAsistencia = async () => {
 }
 
 
-// /api/map / getClients ? term = alpina
-export const getClients = async () => {
+// /api/map /getClients?term=alpina&page=&take
+export const getClients = async (page: number = 1, take: number = 20) => {
   try {
-    return await axios.get(`${VITE_API_URL}map/getClients`);
+    const { token } = useLoginStore.getState()
+
+    return await axios.get(`${VITE_API_URL}map/getClients?page=${page}&take=${take}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   } catch (error) {
     console.error(error);
     throw new Error("Error al obtener clientes");
