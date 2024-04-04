@@ -40,12 +40,10 @@ export const heatmapData = [
     { latitude: 3.8708, longitude: -67.9211, intensity: 0 },
     { latitude: 4.9081, longitude: -73.9403, intensity: 0 },
 ];
-
 export const containerStyle = {
     width: "100%",
     height: "100vh",
 };
-
 export const colombiaBounds = {
     north: 13.509,
     south: -4.227,
@@ -342,27 +340,22 @@ export const blueGreenMapStyles = [
         stylers: [{ color: "#ffffff" }],
     },
 ];
-export const mapaDefecto: any[] = [];
+export const mapaDefecto = [];
 export const Primaria = {
     url: FlotaPrimariaVerde,
 };
 export const Secundaria = {
     url: FlotaSecundariaVerde,
 };
-
 export const Mobile = {
     url: MobileVerde,
 };
-
 export const Finca = {
     url: FincaVerde,
 };
-
 export const FincaVIP = {
     url: FincaVIPVerde,
 };
-
-
 export const Ticket = [
     {
         url: TicketVerde,
@@ -371,7 +364,6 @@ export const Ticket = [
         url: TicketRojo,
     },
 ];
-
 export const ZonaRoja = {
     url: ZonaCalor,
 };

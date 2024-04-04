@@ -1,24 +1,20 @@
-import AsistenciaImg from "@assets/img/img-asistencia/backgroundAsis.png";
 import Logoimg from "../../assets/img/img-asistencia/TSI.png";
-
-export default function asistenciaLayout({ children }: { children: React.ReactNode }) {
+import "./asistenciaLayout.css"
+export default function AsistenciaLayout({ children }: { children: React.ReactNode }) {
     return (
         <main>
-            <img className="prueb" src={AsistenciaImg} alt="bg" />
-            <div>
-                <div className="contenedorTitulo">
-                    <text className="titulo"> CONTROL DE ASISTENCIA</text>
-                    <div style={{ position: "relative" }}>
-                        <div className="LineaCss" />
-                        <div className="PuntosLinea" />
-                        <div className="PuntosLinea PuntosFInLinea" />
-                    </div>
+            <header>
+                <div className="titleContainer">
+                    <h1 className="title"> CONTROL DE ASISTENCIA</h1>
+                    <div className="LineaConPuntos" />
                 </div>
-                <div className="logoimg">
-                    <img className="logoTsi" src={Logoimg} alt="logo" />
-                </div>
-            </div>
-            {children}
+                <img className="logoTsi" src={Logoimg} alt="logo" />
+
+            </header>
+            <section>
+
+                {children}
+            </section>
         </main>
     )
 }

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Barra_Lateral from "../../assets/Recursos/BARRA-LATERAL-V2.png";
 import LogoUsuarioIndefinido from "../../assets/Recursos/BARRA-BOTON.png";
 import BotonFiltro from "../../assets/Recursos/CUADRO-USUARIO.png";
-import BotonMenu from "../BotonMenu/BotonMenu";
 
 import "./LateralFiltroMapa.css";
 
@@ -33,6 +32,7 @@ export default function LateralFiltroMapa({
   return (
     <div>
       <button
+        type="button"
         className={`botonMostrarFiltros ${filtroVisible ? "oculto" : ""}`}
         onClick={toggleFiltro}
       >
@@ -43,7 +43,9 @@ export default function LateralFiltroMapa({
         <img className="FondoMenu" src={Barra_Lateral} alt="Logo Usuario" />
         <img className="FotoUsuario" src={LogoUsuarioIndefinido} alt="User" />
         <text className="textoUsuario">USUARIO</text>
-        <button className="botonCerrar" onClick={toggleFiltro}>
+        <button
+          type="button"
+          className="botonCerrar" onClick={toggleFiltro}>
           X
         </button>
         {/* <div style={{zIndex:50, color:'red'}}> */}

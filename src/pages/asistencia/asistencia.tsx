@@ -4,6 +4,7 @@ import Llamadas from "../../assets/img/img-asistencia/llamadas.png";
 import type { IAsistencia } from "../../models/asistencia.model";
 import { useConections } from "../../context/conexionesprovider";
 import AsistenciaLayout from '@/layouts/Asistencia/asistenciaLayout';
+import TableAsistencia from "@/Componentes/Table/TableAsistencia";
 
 // export default function () {
 //   const { ubicaciones, getUbicaciones } = useConections();
@@ -35,7 +36,8 @@ export default function Asistencia() {
   return (
     <AsistenciaLayout>
 
-      <div className="table-responsive-xl contendorTable">
+      <TableAsistencia />
+      {/* <div className="table-responsive-xl contendorTable">
         <table className="table table-sm table-striped  table-hover">
           <thead className="tableHeader">
             <tr className="tableHeaders itemsCenterHeader">
@@ -130,7 +132,7 @@ export default function Asistencia() {
             </nav>
           </tfoot>
         </table>
-      </div>
+      </div> */}
     </AsistenciaLayout>
 
   );
