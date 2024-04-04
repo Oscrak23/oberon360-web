@@ -34,23 +34,23 @@ export default function IndicadorFiltro() {
         <div
           className="indicadorColor"
           style={{ backgroundColor: "#00a148" }}
-        ></div>
-        <text>Sin novedad</text>
+        />
+        <p>Sin novedad</p>
         <div
           className="indicadorColor"
           style={{ backgroundColor: "#aa0000" }}
-        ></div>
-        <text>Con novedad</text>
+        />
+        <p>Con novedad</p>
         <div
           className="indicadorColor"
           style={{ backgroundColor: "#00429f" }}
-        ></div>
-        <text>En curso</text>
+        />
+        <p>En curso</p>
         <div
           className="indicadorColor"
           style={{ backgroundColor: "#c7c100" }}
-        ></div>
-        <text>Resuelto</text>
+        />
+        <p>Resuelto</p>
       </div>
     </div>
   );

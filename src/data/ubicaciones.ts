@@ -1,4 +1,4 @@
-[
+export default [
   {
     "ID": "C421DAEA-116C-4CCE-B162-040B615B7DA7",
     "TipoIcono": 2,

@@ -20,19 +20,19 @@ import ZonaCalor from "@assets/img/MapaIconos/CIRCULO-RIESGOS.gif";
 
 import { VITE_GOOGLE_MAPS_API_KEY } from "@/config";
 import { UbicacionesClientes } from "@/api/conexiones.api";
-import { useUbicaciones } from "@/states/Ubicaciones.state";
+// import { useUbicaciones } from "@/states/Ubicaciones.state";
 import { containerStyle, Finca, FincaVIP, heatmapData, mapaDefecto, Mobile, Primaria, Secundaria, Ticket } from "@/data/mapaData";
-import ubicacionesJson from "@/data/ubicaciones.json";
+import ubicacionesJson from "@/data/ubicaciones";
 
 function MapaGoogle() {
   const [center, setCenter] = useState({
     lat: 3.3345374,
     lng: -74.2701511,
   });
-
   const [zoomi, setZoomi] = useState(5);
   const [map, setMap] = useState<null | any>(null);
-  const { ubicaciones, setUbicaciones } = useUbicaciones()
+  // const { ubicaciones, setUbicaciones } = useUbicaciones()
+  const [ubicaciones, setUbicaciones] = useState(ubicacionesJson);
   const mapRef = useRef() as any;
   const [selectedMarker, setSelectedMarker] = useState<null | any>(null);
 
@@ -61,7 +61,7 @@ function MapaGoogle() {
     if (map) {
       map.setZoom(zoomi);
     }
-    getData();
+    // getData();
     // setUbicaciones(ubicacionesJson);
   }, []);
 

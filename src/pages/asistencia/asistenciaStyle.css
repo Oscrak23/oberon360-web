@@ -1,7 +1,0 @@
-/* fuentes*/
-@font-face {
-  font-family: "Montserrat-Bold";
-  src: local("Montserrat"),
-    url(../../assets/Fonts/Montserrat-Bold.ttf) format("truetype");
-  font-weight: bold;
-}
