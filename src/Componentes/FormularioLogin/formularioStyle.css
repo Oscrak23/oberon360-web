@@ -10,6 +10,7 @@
 }
 
 .usuLogo {
+  object-fit: contain;
   position: absolute;
   top: 5%;
   left: 50%;
@@ -63,7 +64,7 @@
 }
 
 .ConetenedorContrasena {
-  top: 50%;
+  top: 52%;
 }
 
 .usuPwd {
@@ -110,10 +111,12 @@
   width: 5%;
   height: 30%;
   z-index: 2;
-  right: 12%;
+  right: 15%;
   top: 50%;
   transform: translate(-0%, -50%);
 }
 label {
   color: #00e7ff;
+  position: absolute;
+  top: -15px;
 }

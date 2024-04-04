@@ -6,6 +6,7 @@ import MobileVerde from "@assets/img/MapaIconos/MOBILE-VERDE.png";
 import TicketRojo from "@assets/img/MapaIconos/DAVIVIENDA-ROJO.png";
 import TicketVerde from "@assets/img/MapaIconos/DAVIVIENDA-VERDE.png";
 import ZonaCalor from "@assets/img/MapaIconos/CIRCULO-RIESGOS.gif";
+import escudo from "@assets/img/MapaIconos/asistencia-verde.png"
 
 export const heatmapData = [
     { latitude: 4.657, longitude: -74.047, intensity: 97 },
@@ -342,7 +343,7 @@ export const blueGreenMapStyles = [
 ];
 export const mapaDefecto = [];
 export const Primaria = {
-    url: FlotaPrimariaVerde,
+    url: escudo,
 };
 export const Secundaria = {
     url: FlotaSecundariaVerde,

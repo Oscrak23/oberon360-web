@@ -33,3 +33,14 @@ export const getAsistencia = async () => {
     throw new Error("Error al obtener asistencia");
   }
 }
+
+
+// /api/map / getClients ? term = alpina
+export const getClients = async () => {
+  try {
+    return await axios.get(`${VITE_API_URL}map/getClients`);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error al obtener clientes");
+  }
+}

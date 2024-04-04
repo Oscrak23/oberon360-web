@@ -64,7 +64,11 @@
   /* background-color: black; */
 }
 .ImagenOberonGirando {
+  position: absolute;
   width: 350px;
+  top: 50%;
+  left: 150px;
+  transform: translate(0%, -50%);
 }
 
 .formContainer {

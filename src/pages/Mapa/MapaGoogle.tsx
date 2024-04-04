@@ -56,7 +56,6 @@ function MapaGoogle() {
   const getUbicaciones = new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve(ubicacionesJson);
-
     }, 1500);
   });
 
@@ -70,11 +69,11 @@ function MapaGoogle() {
     if (map) {
       map.setZoom(zoomi);
     }
-    // getData();
-    getUbicaciones.then((data: any) => {
-      console.log(data);
-      setUbicaciones(data);
-    });
+    getData();
+    // getUbicaciones.then((data: any) => {
+    //   // console.log(data);
+    //   setUbicaciones(data);
+    // });
     // setUbicaciones(ubicacionesJson);
   }, []);
   useEffect(() => { }, [ubicacionesJson])
@@ -133,33 +132,38 @@ function MapaGoogle() {
           > */}
           {/* {(clusterer) => */}
           {mostrarVehiculos &&
-            ubicaciones.map((coordenada: any) => (
-              <Marker
-                key={coordenada.ID}
-                position={{
-                  lat: Number.parseFloat(coordenada.Latitud),
-                  lng: Number.parseFloat(coordenada.Longitud),
-                }}
-                onClick={() => handleMarkerClick(coordenada)}
-                // clusterer={clusterer}
-                icon={
-                  coordenada.TipoIcono == "1"
-                    ? Primaria
-                    : coordenada.TipoIcono == "2"
-                      ? Secundaria
-                      : coordenada.TipoIcono == "3"
-                        ? Mobile
-                        : coordenada.TipoIcono == "4"
-                          ? Finca
-                          : coordenada.TipoIcono == "5"
-                            ? FincaVIP
-                            : coordenada.TiempoFinal >= coordenada.hora_actual
-                              ? Ticket[0]
-                              : Ticket[1]
-                }
-              />
+            ubicaciones.map((coordenada) => (
+              <div className="icono">
+                <Marker
+                  key={coordenada.ID}
+                  position={{
+                    lat: Number.parseFloat(coordenada.CLIUBIC_LATITUD),
+                    lng: Number.parseFloat(coordenada.CLIUBIC_LONGITUD),
+                  }}
+                  onClick={() => handleMarkerClick(coordenada)}
+                  // clusterer={clusterer}
+                  icon={
+                    Primaria
+                  }
+                // icon={
+                //   coordenada.TipoIcono == "1"
+                //     ? Primaria
+                //     : coordenada.TipoIcono == "2"
+                //       ? Secundaria
+                //       : coordenada.TipoIcono == "3"
+                //         ? Mobile
+                //         : coordenada.TipoIcono == "4"
+                //           ? Finca
+                //           : coordenada.TipoIcono == "5"
+                //             ? FincaVIP
+                //             : coordenada.TiempoFinal >= coordenada.hora_actual
+                //               ? Ticket[0]
+                //               : Ticket[1]
+                // }
+                >
+                </Marker>
+              </div>
             ))}
-          {/* </MarkerClusterer> */}
 
           {heatmapData.map((coordenada, index) => (
             <Marker

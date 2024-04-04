@@ -9,11 +9,8 @@ export default function loginLayout({ children }: { children: React.ReactNode })
       <img className='prueb' src={BKGoberon} alt="Background" />
       <img className='logo360ima' src={logo360} alt="Logo 360" />
       <img className='LogoRms' src={Pwdrms} alt="Powered by RMS" />
-      <div>
-
-        <img className='ImagenOberonGirando' src={logo360Mov} alt="Oberon Logo" />
-        {children}
-      </div>
+      <img className='ImagenOberonGirando' src={logo360Mov} alt="Oberon Logo" />
+      {children}
     </main>
   )
 }

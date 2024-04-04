@@ -30,3 +30,6 @@
   top: -31px !important;
   background-color: rgba(16, 26, 50, 1);
 }
+.icono div {
+  box-shadow: red 10px 10px 20px;
+}

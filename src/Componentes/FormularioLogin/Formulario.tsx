@@ -8,6 +8,7 @@ import { login } from "../../api/conexiones.api";
 import { toast } from "react-toastify";
 import { useLoginStore } from "@/states/Login.state";
 import { verifyJWT } from "@/tools";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 export default function Formulario({ setCargando }: { setCargando: (b: boolean) => void }) {
   const navigate = useNavigate();
@@ -98,7 +99,7 @@ export default function Formulario({ setCargando }: { setCargando: (b: boolean) 
             onClick={MostrarPass}
             type="button"
           >
-            {mostrarPassword ? "O" : "M"}
+            {mostrarPassword ? <FaEye style={{ color: "#00e7ff" }} /> : <FaEyeSlash style={{ color: "#00e7ff" }} />}
           </button>
         </div>
         <div className="ContainerBtn">
