@@ -51,6 +51,15 @@ function MapaGoogle() {
   }, []);
 
 
+  //promise ubicaciones
+
+  const getUbicaciones = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(ubicacionesJson);
+
+    }, 1500);
+  });
+
   const getData = async () => {
     const response = await UbicacionesClientes();
     console.log(response);
@@ -61,9 +70,14 @@ function MapaGoogle() {
     if (map) {
       map.setZoom(zoomi);
     }
-    getData();
+    // getData();
+    getUbicaciones.then((data: any) => {
+      console.log(data);
+      setUbicaciones(data);
+    });
     // setUbicaciones(ubicacionesJson);
   }, []);
+  useEffect(() => { }, [ubicacionesJson])
 
   const [mostrarVehiculos, setMostrarVehiculos] = useState(true);
 
