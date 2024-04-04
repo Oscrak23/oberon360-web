@@ -3,7 +3,7 @@ import LogoUsuarioIndefinido from "../../assets/Recursos/BARRA-BOTON.png";
 import BotonFiltro from "../../assets/Recursos/CUADRO-USUARIO.png";
 import Ondas from "@assets/Recursos/ONDA-BARRA-LATERAL.svg"
 import "./LateralFiltroMapa.css";
-
+import oberon360 from "@assets/img/login/LOGO-OBERON-360-FIN.png"
 export default function LateralFiltroMapa({
   mostrarVehiculos,
   setMostrarVehiculos,
@@ -41,6 +41,7 @@ export default function LateralFiltroMapa({
       <div className={`BarraLateral ${filtroVisible ? "visible" : ""}`}>
         <img src={Ondas} alt="ondas" className="ondas" />
         <img className="FotoUsuario" src={LogoUsuarioIndefinido} alt="User" />
+        <img className="oberon360" src={oberon360} alt="oberon360" />
         <h2 className="textoUsuario">USUARIO</h2>
         <button
           type="button"
@@ -48,29 +49,27 @@ export default function LateralFiltroMapa({
           X
         </button>
         <div className="textMenu">
-          <div>
-            <button>
-              Clientes
-            </button>
-            <button>
-              Control de asistencia
-            </button>
-            <button>
-              Tecnología Inteligente
-            </button>
-            <button>
-              Riesgos
-            </button>
-            <button>
-              Operación
-            </button>
-            <button>
-              Tickets
-            </button>
-            <button>
-              Tableros de control
-            </button>
-          </div>
+          <button className="btn-menu">
+            Clientes
+          </button>
+          <button className="btn-menu">
+            Control de asistencia
+          </button>
+          <button className="btn-menu">
+            Tecnología Inteligente
+          </button>
+          <button className="btn-menu">
+            Riesgos
+          </button>
+          <button className="btn-menu">
+            Operación
+          </button>
+          <button className="btn-menu">
+            Tickets
+          </button>
+          <button className="btn-menu">
+            Tableros de control
+          </button>
         </div>
       </div>
     </div>

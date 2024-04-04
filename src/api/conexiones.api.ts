@@ -1,5 +1,6 @@
 import axios from "axios";
 import { VITE_API_URL2, VITE_API_URL } from "@/config";
+import { useLoginStore } from "@/states/Login.state"
 export const login = async (Login: {
   user: string;
   password: string;
@@ -8,9 +9,16 @@ export const login = async (Login: {
   return await axios.post(`${VITE_API_URL}auth/Login`, Login);
 }
 
-export const UbicacionesClientes = async () => {
+export const UbicacionesClientes = async (idCliente?: string | number) => {
   try {
-    return await axios.get(`${VITE_API_URL2}Ubicaciones`);
+    const { token } = useLoginStore.getState()
+    return await axios.post(`${VITE_API_URL}map/getUbications`, {
+      CLIUBIC_ID_CLIENT: idCliente || null
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   } catch (error) {
     console.error(error);
     throw new Error("Error al obtener ubicaciones");

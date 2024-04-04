@@ -1,18 +1,19 @@
 
 import "react-toastify/dist/ReactToastify.css";
-import { ConexionesContextProvider } from "./context/conexionesprovider";
 import { AppRoutes } from "./routes";
 import { ToastContainer } from "react-toastify";
-
+import "./App.css";
+import MainLayout from "./layouts/mainLayout";
 
 
 
 function App() {
   return (
-    <ConexionesContextProvider>
+    <MainLayout>
       <AppRoutes />
       <ToastContainer />
-    </ConexionesContextProvider>
+    </MainLayout>
+
   );
 }
 

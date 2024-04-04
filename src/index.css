@@ -4,15 +4,26 @@
     url(./assets/Fonts/Montserrat-Bold.ttf) format("truetype");
   font-weight: bold;
 }
+@font-face {
+  font-family: "Montserrat-Medium";
+  src: local("Montserrat"),
+    url(./assets/Fonts/Montserrat-Medium.ttf) format("truetype");
+  font-weight: regular;
+}
+@font-face {
+  font-family: "Montserrat-Light";
+  src: local("Montserrat"),
+    url(./assets/Fonts/Montserrat-Light.ttf) format("truetype");
+  font-weight: semibold;
+}
 html {
   margin: 0;
   padding: 0;
-  font-family: "Montserrat-Bold";
 }
 body {
   margin: 0;
   padding: 0;
-  font-family: "Montserrat-Bold";
+  font-family: "Montserrat-Medium";
 }
 main {
   width: 100vw;

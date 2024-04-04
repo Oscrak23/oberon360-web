@@ -86,5 +86,18 @@
 }
 
 .textMenu {
-  width: 100%;
+  gap: 10px;
+  width: 300px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.oberon360 {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 150px;
+  z-index: 2;
 }

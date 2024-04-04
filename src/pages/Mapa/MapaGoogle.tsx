@@ -20,7 +20,7 @@ import ZonaCalor from "@assets/img/MapaIconos/CIRCULO-RIESGOS.gif";
 
 import { VITE_GOOGLE_MAPS_API_KEY } from "@/config";
 import { UbicacionesClientes } from "@/api/conexiones.api";
-// import { useUbicaciones } from "@/states/Ubicaciones.state";
+import { useUbicaciones } from "@/states/Ubicaciones.state";
 import { containerStyle, Finca, FincaVIP, heatmapData, mapaDefecto, Mobile, Primaria, Secundaria, Ticket } from "@/data/mapaData";
 import ubicacionesJson from "@/data/ubicaciones";
 
@@ -31,8 +31,7 @@ function MapaGoogle() {
   });
   const [zoomi, setZoomi] = useState(5);
   const [map, setMap] = useState<null | any>(null);
-  // const { ubicaciones, setUbicaciones } = useUbicaciones()
-  const [ubicaciones, setUbicaciones] = useState(ubicacionesJson);
+  const { ubicaciones, setUbicaciones } = useUbicaciones()
   const mapRef = useRef() as any;
   const [selectedMarker, setSelectedMarker] = useState<null | any>(null);
 
@@ -54,6 +53,7 @@ function MapaGoogle() {
 
   const getData = async () => {
     const response = await UbicacionesClientes();
+    console.log(response);
     setUbicaciones(response.data);
   }
 
@@ -61,7 +61,7 @@ function MapaGoogle() {
     if (map) {
       map.setZoom(zoomi);
     }
-    // getData();
+    getData();
     // setUbicaciones(ubicacionesJson);
   }, []);
 
@@ -72,48 +72,11 @@ function MapaGoogle() {
     googleMapsApiKey: VITE_GOOGLE_MAPS_API_KEY,
   });
 
-  // const [filtro, setFiltro] = useState(true);
 
   const onUnmount = useCallback(function callback() {
     setMap(null);
   }, []);
 
-  // const handleZoomChanged = () => {
-  //   const newZoom = mapRef.current.getZoom();
-  //   setZoomi(newZoom);
-  // };
-
-
-
-  // {
-  //   filtro &&
-  //     ubicaciones.map((coordenada: any) => (
-  //       <Marker
-  //         key={coordenada.ID}
-  //         position={{
-  //           lat: parseFloat(coordenada.Latitud),
-  //           lng: parseFloat(coordenada.Longitud),
-  //         }}
-  //         onClick={() => handleMarkerClick(coordenada)}
-  //         // clusterer={clusterer}
-  //         icon={
-  //           coordenada.TipoIcono == "1"
-  //             ? Primaria
-  //             : coordenada.TipoIcono == "2"
-  //               ? Secundaria
-  //               : coordenada.TipoIcono == "3"
-  //                 ? Mobile
-  //                 : coordenada.TipoIcono == "4"
-  //                   ? Finca
-  //                   : coordenada.TipoIcono == "5"
-  //                     ? FincaVIP
-  //                     : coordenada.TiempoFinal >= coordenada.hora_actual
-  //                       ? Ticket[0]
-  //                       : Ticket[1]
-  //         }
-  //       />
-  //     ));
-  // }
 
   return isLoaded ? (
     <>
@@ -156,7 +119,7 @@ function MapaGoogle() {
           > */}
           {/* {(clusterer) => */}
           {mostrarVehiculos &&
-            ubicacionesJson.map((coordenada: any) => (
+            ubicaciones.map((coordenada: any) => (
               <Marker
                 key={coordenada.ID}
                 position={{

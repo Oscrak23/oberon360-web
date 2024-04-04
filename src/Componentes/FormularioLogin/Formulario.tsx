@@ -56,7 +56,7 @@ export default function Formulario({ setCargando }: { setCargando: (b: boolean) 
     const data = await verifyJWT(token)
     console.log(data);
     if (data !== false) {
-      navigate("/mapa")
+      // navigate("/mapa")
     }
   }
 
