@@ -25,15 +25,6 @@ export const UbicacionesClientes = async (idCliente?: string | number) => {
   }
 }
 
-export const getAsistencia = async () => {
-  try {
-    return await axios.get(`${VITE_API_URL2}asistencia`);
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error al obtener asistencia");
-  }
-}
-
 
 // /api/map /getClients?term=alpina&page=&take
 export const getClients = async (page: number = 1, take: number = 20) => {
@@ -48,5 +39,21 @@ export const getClients = async (page: number = 1, take: number = 20) => {
   } catch (error) {
     console.error(error);
     throw new Error("Error al obtener clientes");
+  }
+}
+// /attendance/findAttendance
+
+export const getAsistencia = async (page: number = 1, take: number = 100) => {
+  try {
+    const { token } = useLoginStore.getState()
+    return await axios.get(`${VITE_API_URL}attendance/findAttendance?page=${page}&take=${take}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error al obtener asistencia");
   }
 }

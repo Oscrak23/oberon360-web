@@ -7,6 +7,7 @@ import TicketRojo from "@assets/img/MapaIconos/DAVIVIENDA-ROJO.png";
 import TicketVerde from "@assets/img/MapaIconos/DAVIVIENDA-VERDE.png";
 import ZonaCalor from "@assets/img/MapaIconos/CIRCULO-RIESGOS.gif";
 import escudo from "@assets/img/MapaIconos/asistencia-verde.png"
+import { TRiesgo } from "@/models/ubicaciones.model";
 
 export const heatmapData = [
     { latitude: 4.657, longitude: -74.047, intensity: 97 },
@@ -368,3 +369,4 @@ export const Ticket = [
 export const ZonaRoja = {
     url: ZonaCalor,
 };
+export const riesgosData: TRiesgo[] = ["vial"]

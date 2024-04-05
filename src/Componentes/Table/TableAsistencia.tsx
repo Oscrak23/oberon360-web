@@ -1,8 +1,10 @@
 import DataTable from 'react-data-table-component';
-import { dataAsistencia } from '@/data/asistenciaData';
 import Llamadas from "@assets/img/img-asistencia/llamadas.png";
+import type { IAsistencia } from '@/models/asistencia.model';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
-export default function TableAsistencia() {
+export default function TableAsistencia({ data }: { data: IAsistencia[] }) {
 
     const customStyles = {
         rows: {
@@ -50,7 +52,18 @@ export default function TableAsistencia() {
         },
     };
     const handleLlamar = () => {
-        alert("se esta llamando al colaborador (:");
+        toast.promise(
+            new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve("Llamada realizada")
+                }, 2000)
+            }),
+            {
+                pending: 'Llamando...',
+                success: 'Llamada realizada',
+                error: 'Error al realizar la llamada'
+            }
+        )
     };
     const columns = [
         { name: "ASISTENCIA ID", selector: (row: any) => row.ASISTENCIA_ID, sortable: true },
@@ -77,14 +90,14 @@ export default function TableAsistencia() {
         },
     ]
 
-
+    useEffect(() => { }, [data])
 
 
     return (
         <>
             <DataTable
                 columns={columns}
-                data={dataAsistencia}
+                data={data}
                 pagination
                 customStyles={customStyles}
                 fixedHeader={true}

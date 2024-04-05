@@ -21,11 +21,14 @@ import ZonaCalor from "@assets/img/MapaIconos/CIRCULO-RIESGOS.gif";
 import { VITE_GOOGLE_MAPS_API_KEY } from "@/config";
 import { getClients, UbicacionesClientes } from "@/api/conexiones.api";
 import { useUbicaciones } from "@/states/Ubicaciones.state";
-import { containerStyle, Finca, FincaVIP, heatmapData, mapaDefecto, Mobile, Primaria, Secundaria, Ticket } from "@/data/mapaData";
-import type { IClienteResponse, IUbicacionCliente } from "@/models/ubicaciones.model";
+import { containerStyle, heatmapData, mapaDefecto, Primaria, } from "@/data/mapaData";
+import type { TRiesgo, IClienteResponse, IUbicacionCliente } from "@/models/ubicaciones.model";
 import { darkMapStyles } from '../../data/mapaData';
+import { FaMoon, FaSun } from "react-icons/fa6";
 
 function MapaGoogle() {
+  const mapRef = useRef() as any;
+
   const [center, setCenter] = useState({
     lat: 3.3345374,
     lng: -74.2701511,
@@ -33,8 +36,9 @@ function MapaGoogle() {
   const [zoomi, setZoomi] = useState(5);
   const [map, setMap] = useState<null | any>(null);
   const { ubicaciones, setUbicaciones } = useUbicaciones()
-  const mapRef = useRef() as any;
+  const [ubicacionesShow, setUbicacionesShow] = useState<IUbicacionCliente[]>([]);
   const [selectedMarker, setSelectedMarker] = useState<null | IUbicacionCliente>(null);
+  const [theme, setTheme] = useState("light");
   const [clientes, setClientes] = useState<IClienteResponse[]>([
     {
       CLIE_ID_REG: "34",
@@ -42,22 +46,28 @@ function MapaGoogle() {
     }
   ]);
   const [clienteSelected, setClienteSelected] = useState<null | IClienteResponse>(null);
-
+  const [mapaCalor, setMapaCalor] = useState([]);
+  const [riesgos, setRiesgos] = useState<TRiesgo[]>([]);
   const handleClienteChange = (cliente: IClienteResponse) => {
-    setClienteSelected(cliente);
-    const ubicacionesFilter = ubicaciones.filter((ubicacion) => ubicacion.CLIUBIC_ID_CLIENTE === cliente.CLIE_ID_REG);
-    setUbicaciones(ubicacionesFilter);
-    console.log(cliente);
+    if (clienteSelected?.CLIE_ID_REG === cliente.CLIE_ID_REG) {
+      setClienteSelected(null);
+      setUbicacionesShow(ubicaciones);
+    } else {
+
+      setClienteSelected(cliente);
+      const ubicacionesFilter = ubicaciones.filter((ubicacion) => ubicacion.CLIUBIC_ID_CLIENTE === cliente.CLIE_ID_REG);
+      setUbicacionesShow(ubicacionesFilter);
+      console.log(cliente);
+    }
   }
 
   const handleMarkerClick = (marker: any) => {
-    console.log(marker);
     setSelectedMarker(marker);
     setCenter({
       lat: Number.parseFloat(marker.Latitud),
       lng: Number.parseFloat(marker.Longitud),
     });
-    setZoomi(7);
+    // setZoomi(7);
   };
 
   const onLoad = useCallback((map: any) => {
@@ -69,23 +79,44 @@ function MapaGoogle() {
     const response = await UbicacionesClientes();
     console.log(response);
     setUbicaciones(response.data);
+    setUbicacionesShow(response.data);
     const responseClient = await getClients()
     console.log(responseClient);
-    const clientes = [{
-      CLIE_ID_REG: "34",
-      CLIE_COMERCIAL: "ALPINA"
-    }, ...responseClient.data.data]
+    let clientes = []
+    if (responseClient.data.data.find((cliente: any) => cliente.CLIE_ID_REG === "34")) {
+      clientes = responseClient.data.data
+    } else {
+      clientes = [{
+        CLIE_ID_REG: "34",
+        CLIE_COMERCIAL: "ALPINA"
+      }, ...responseClient.data.data]
+    }
     setClientes(clientes);
   }
 
+  const getMapaCalor = new Promise((resolve, reject) => {
+    try {
+      setTimeout(() => {
+        resolve(heatmapData);
+
+      }, 100);
+    } catch (error) {
+      reject(error)
+    }
+  });
   useEffect(() => {
     if (map) {
       map.setZoom(zoomi);
     }
-    getData();
+    if (ubicaciones.length === 0) {
+      getData();
+    }
+    getMapaCalor.then((data: any) => {
+      setMapaCalor(data);
+    });
   }, []);
 
-  useEffect(() => { }, [ubicaciones])
+  useEffect(() => { }, [ubicaciones, zoomi])
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -103,7 +134,9 @@ function MapaGoogle() {
       <Notificaciones />
       <LateralFiltroMapa
         clientes={clientes}
+        cliente={clienteSelected}
         setCliente={handleClienteChange}
+        setRiesgosShow={setRiesgos}
       />
       <EtiquetaLateralLogoCli cliente={clienteSelected} />
       <GoogleMap
@@ -115,18 +148,16 @@ function MapaGoogle() {
         onZoomChanged={() => {
           if (mapRef.current) {
             const newZoom = mapRef.current.getZoom();
-            if (newZoom !== zoomi) {
-              setZoomi(newZoom);
-            }
+            setZoomi(newZoom);
           }
         }}
         options={{
-          styles: darkMapStyles,
+          styles: theme === "light" ? mapaDefecto : darkMapStyles,
           //darkMapStyles       mapaDefecto
-          disableDefaultUI: true,
+          // disableDefaultUI: true,
           zoomControl: true,
           minZoom: 6,
-          maxZoom: 8,
+          // maxZoom: 8,
           zoomControlOptions: {
             position: window.google.maps.ControlPosition.RIGHT_CENTER, // Cambia la posición del control de zoom (TOP_LEFT, TOP_CENTER, TOP_RIGHT, LEFT_CENTER, RIGHT_CENTER, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT)
           },
@@ -139,7 +170,7 @@ function MapaGoogle() {
           > */}
           {/* {(clusterer) => */}
           {
-            ubicaciones.map((coordenada, index) => (
+            ubicacionesShow.map((coordenada, index) => (
               <div className="icono">
                 <Marker
                   key={index}
@@ -147,7 +178,8 @@ function MapaGoogle() {
                     lat: Number.parseFloat(coordenada.CLIUBIC_LATITUD),
                     lng: Number.parseFloat(coordenada.CLIUBIC_LONGITUD),
                   }}
-                  onClick={() => handleMarkerClick(coordenada)}
+                  onMouseOver={() => handleMarkerClick(coordenada)}
+                  onMouseOut={() => setSelectedMarker(null)}
                   // clusterer={clusterer}
                   icon={
                     Primaria
@@ -172,7 +204,7 @@ function MapaGoogle() {
               </div>
             ))}
 
-          {heatmapData.map((coordenada, index) => (
+          {riesgos.length > 0 && mapaCalor.map((coordenada: any, index) => (
             <Marker
               key={index}
               position={{
@@ -219,13 +251,20 @@ function MapaGoogle() {
           )}
         </div>
       </GoogleMap>
+      <div className="theme">
+        {theme === "light" ? (
+          <button className="dark" onClick={() => setTheme("dark")}>
+            <FaMoon />
+          </button>
+        ) : (
+          <button className="light" onClick={() => setTheme("light")}>
+            <FaSun />
+          </button>
+        )}
+      </div>
       <IndicadorFiltro />
-      {/*       <ContenedorTickets
-        selectedMarker={selectedMarker}
-        setSelectedMarker={setSelectedMarker}
-        center={center}
-        setCenter={setCenter}
-      /> */}
+
+
     </>
   ) : (
     <></>

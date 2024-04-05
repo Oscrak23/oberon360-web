@@ -163,3 +163,4 @@ export interface IClienteResponse {
     CLIE_ID_REG: string;
     CLIE_COMERCIAL: string;
 }
+export type TRiesgo = "vial" | "seguridad" 

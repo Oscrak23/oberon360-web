@@ -18,3 +18,4 @@ export interface IAsistencia {
   HORA_INCIDENCIA: any;
   ESTADO_ASISTENCIA: any;
 }
+
