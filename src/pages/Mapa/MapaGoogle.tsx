@@ -8,6 +8,7 @@ import {
   GoogleMap,
   useJsApiLoader,
   Marker,
+  MarkerClusterer,
   InfoWindow,
 } from "@react-google-maps/api";
 import EtiquetaLateralLogoCli from "@components/EtiquetaLateralCliente/EtiquetaLateralLogoCli";
@@ -153,22 +154,15 @@ function MapaGoogle() {
         }}
         options={{
           styles: theme === "light" ? mapaDefecto : darkMapStyles,
-          //darkMapStyles       mapaDefecto
-          // disableDefaultUI: true,
           zoomControl: true,
           minZoom: 6,
-          // maxZoom: 8,
+
           zoomControlOptions: {
-            position: window.google.maps.ControlPosition.RIGHT_CENTER, // Cambia la posición del control de zoom (TOP_LEFT, TOP_CENTER, TOP_RIGHT, LEFT_CENTER, RIGHT_CENTER, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT)
+            position: window.google.maps.ControlPosition.RIGHT_CENTER,
           },
         }}
       >
         <div>
-          {/* <MarkerClusterer
-            gridSize={50} 
-            averageCenter 
-          > */}
-          {/* {(clusterer) => */}
           {
             ubicacionesShow.map((coordenada, index) => (
               <div className="icono">
@@ -180,25 +174,9 @@ function MapaGoogle() {
                   }}
                   onMouseOver={() => handleMarkerClick(coordenada)}
                   onMouseOut={() => setSelectedMarker(null)}
-                  // clusterer={clusterer}
                   icon={
                     Primaria
                   }
-                // icon={
-                //   coordenada.TipoIcono == "1"
-                //     ? Primaria
-                //     : coordenada.TipoIcono == "2"
-                //       ? Secundaria
-                //       : coordenada.TipoIcono == "3"
-                //         ? Mobile
-                //         : coordenada.TipoIcono == "4"
-                //           ? Finca
-                //           : coordenada.TipoIcono == "5"
-                //             ? FincaVIP
-                //             : coordenada.TiempoFinal >= coordenada.hora_actual
-                //               ? Ticket[0]
-                //               : Ticket[1]
-                // }
                 >
                 </Marker>
               </div>
@@ -251,6 +229,99 @@ function MapaGoogle() {
           )}
         </div>
       </GoogleMap>
+      {/* <GoogleMap
+        onLoad={onLoad}
+        mapContainerStyle={containerStyle}
+        center={center}
+        onUnmount={onUnmount}
+        zoom={zoomi}
+        onZoomChanged={() => {
+          if (mapRef.current) {
+            const newZoom = mapRef.current.getZoom();
+            setZoomi(newZoom);
+          }
+        }}
+        options={{
+          styles: theme === "light" ? mapaDefecto : darkMapStyles,
+          zoomControl: true,
+          minZoom: 6,
+          zoomControlOptions: {
+            position: window.google.maps.ControlPosition.RIGHT_CENTER,
+          },
+        }}
+      >
+        <MarkerClusterer
+          options={{
+            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+            gridSize: 50,
+            averageCenter: true
+          }}
+        >
+          {(clusterer) => (
+            <>
+              {ubicacionesShow.map((coordenada, index) => (
+                <Marker
+                  key={index}
+                  position={{
+                    lat: Number.parseFloat(coordenada.CLIUBIC_LATITUD),
+                    lng: Number.parseFloat(coordenada.CLIUBIC_LONGITUD),
+                  }}
+                  onMouseOver={() => handleMarkerClick(coordenada)}
+                  onMouseOut={() => setSelectedMarker(null)}
+                  clusterer={clusterer}
+                  icon={Primaria}
+                />
+              ))}
+
+              {riesgos.length > 0 && mapaCalor.map((coordenada: any, index) => (
+                <Marker
+                  key={index}
+                  position={{
+                    lat: Number.parseFloat(`${coordenada.latitude}`),
+                    lng: Number.parseFloat(`${coordenada.longitude}`),
+                  }}
+                  icon={{
+                    url: ZonaCalor,
+                    scaledSize: new window.google.maps.Size(
+                      (coordenada.intensity / 10) * zoomi,
+                      (coordenada.intensity / 10) * zoomi
+                    ),
+                    anchor: new window.google.maps.Point(
+                      ((coordenada.intensity / 10) * zoomi) / 2,
+                      ((coordenada.intensity / 10) * zoomi) / 2
+                    ),
+                    labelOrigin: new window.google.maps.Point(
+                      ((coordenada.intensity / 10) * zoomi) / 2,
+                      ((coordenada.intensity / 10) * zoomi) / 2
+                    ),
+                  }}
+                  clusterer={clusterer}
+                />
+              ))}
+            </>
+          )}
+        </MarkerClusterer>
+
+        {selectedMarker && (
+          <InfoWindow
+            position={{
+              lat: Number.parseFloat(selectedMarker.CLIUBIC_LATITUD),
+              lng: Number.parseFloat(selectedMarker.CLIUBIC_LONGITUD),
+            }}
+            onCloseClick={() => setSelectedMarker(null)}
+          >
+            <div className="mapPopover" >
+              <p>Ciente: <span>{selectedMarker.client.CLIE_COMERCIAL}</span></p>
+              <p>Nombre: <span>{selectedMarker.CLIUBIC_NOMBRE}</span> </p>
+              <p>Direccion: <span>{selectedMarker.CLIUBIC_DIRECCION}</span> </p>
+
+              <p>Latitud: <span>{selectedMarker.CLIUBIC_LATITUD}</span> </p>
+              <p>Longitud: <span>{selectedMarker.CLIUBIC_LONGITUD}</span> </p>
+            </div>
+          </InfoWindow>
+        )}
+      </GoogleMap> */}
+
       <div className="theme">
         {theme === "light" ? (
           <button className="dark" onClick={() => setTheme("dark")}>
