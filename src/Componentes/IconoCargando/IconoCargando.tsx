@@ -1,5 +1,4 @@
-import React from 'react';
-import LogoCarga from '../../assets/img/login/CIRCULO-CARGAR.png';
+import LogoCarga from '@assets/img/login/CIRCULO-CARGAR.png';
 import './IconoCargando.css'
 
 export default function IconoCargando() {

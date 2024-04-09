@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import "../FormularioLogin/formularioStyle.css";
-import usuLogo from "../../assets/img/login/ICONO-USUARIO-GRANDE.png";
-import inputLogo from "../../assets/img/login/CUADRO-USUARIO.png";
-import passwordLogo from "../../assets/img/login/CUADRO-CONTRASEÑA.png";
+import "../formularioStyle.css";
+import usuLogo from "@assets/img/login/ICONO-USUARIO-GRANDE.png";
+import inputLogo from "@assets/img/login/CUADRO-USUARIO.png";
+import passwordLogo from "@assets/img/login/CUADRO-CONTRASEÑA.png";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../api/conexiones.api";
+import { login } from "@/api/conexiones.api";
 import { toast } from "react-toastify";
 import { useLoginStore } from "@/states/Login.state";
 import { verifyJWT } from "@/tools";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
-export default function Formulario({ setCargando }: { setCargando: (b: boolean) => void }) {
+export default function Formulario({ setCargando, setReset }: { setCargando: (b: boolean) => void, setReset: (b: boolean) => void }) {
   const navigate = useNavigate();
   const { setToken, setUser } = useLoginStore()
   const [userForm, setUserForm] = useState("");
@@ -30,15 +30,21 @@ export default function Formulario({ setCargando }: { setCargando: (b: boolean) 
     try {
       const respuesta = await login({ user: userForm, password });
       console.log(respuesta);
+
       setUser(userForm);
       setToken(respuesta.data.token);
       localStorage.setItem("token", respuesta.data.token);
-      navigate("/mapa");
+      if (respuesta.data.resetPass) {
+        setReset(true);
+      } else {
+        navigate("/mapa");
 
+      }
+      setCargando(false);
     } catch (error: any) {
       toast.error(error.response.data.message, { autoClose: 5000 })
       console.log(error);
-
+      setCargando(false);
     }
     setCargando(false);
   };
@@ -71,6 +77,7 @@ export default function Formulario({ setCargando }: { setCargando: (b: boolean) 
   return (
     <div className="contenedor_formulario">
       <img className="usuLogo" src={usuLogo} alt="Usuario Logo" />
+      <h1>Ingreso</h1>
       <form>
         <div className="ContainerUsuText">
           <label htmlFor="user">Usuario</label>
@@ -78,6 +85,7 @@ export default function Formulario({ setCargando }: { setCargando: (b: boolean) 
           <img className="ImgUsuText" src={inputLogo} alt="Input Logo" />
           <input
             id="user"
+            autoComplete="false"
             className="ImgUsuText InputText"
             onChange={handleUsuarioChange}
             type="text"

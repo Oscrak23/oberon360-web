@@ -6,6 +6,7 @@ import MobileVerde from "@assets/img/MapaIconos/MOBILE-VERDE.png";
 import TicketRojo from "@assets/img/MapaIconos/DAVIVIENDA-ROJO.png";
 import TicketVerde from "@assets/img/MapaIconos/DAVIVIENDA-VERDE.png";
 import ZonaCalor from "@assets/img/MapaIconos/CIRCULO-RIESGOS.gif";
+// import escudo from "@assets/img/MapaIconos/ihmze7vc.png"
 import escudo from "@assets/img/MapaIconos/asistencia-verde.png"
 import { TRiesgo } from "@/models/ubicaciones.model";
 
@@ -52,91 +53,7 @@ export const colombiaBounds = {
     west: -78.99,
     east: -66.869,
 };
-export const darkMapStyles = [
-    { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-    { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-    { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-    {
-        featureType: "administrative",
-        elementType: "geometry.stroke",
-        stylers: [{ color: "#e6e6e6" }], // lineas de pais
-    },
-    {
-        featureType: "administrative.locality",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#ffffff" }],
-    },
-    {
-        featureType: "poi",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#d59563" }],
-    },
-    {
-        featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [{ color: "#263c3f" }],
-    },
-    {
-        featureType: "poi.park",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#6b9a76" }],
-    },
-    {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [{ color: "#38414e" }], // calles
-    },
-    {
-        featureType: "road",
-        elementType: "geometry.stroke",
-        stylers: [{ color: "#212a37" }], // contorno calle
-    },
-    {
-        featureType: "road",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#9ca5b3" }], //texto de las calles
-    },
-    {
-        featureType: "road.highway",
-        elementType: "geometry",
-        stylers: [{ color: "#00e7ff" }], // vias principales
-    },
-    {
-        featureType: "road.highway",
-        elementType: "geometry.stroke",
-        stylers: [{ color: "#1f2835" }],
-    },
-    {
-        featureType: "road.highway",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#f3d19c" }],
-    },
-    {
-        featureType: "transit",
-        elementType: "geometry",
-        stylers: [{ color: "#2f3948" }],
-    },
-    {
-        featureType: "transit.station",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#d59563" }],
-    },
-    {
-        featureType: "water",
-        elementType: "geometry",
-        stylers: [{ color: "#071328" }], // agua mar
-    },
-    {
-        featureType: "water",
-        elementType: "labels.text.fill",
-        stylers: [{ color: "#515c6d" }],
-    },
-    {
-        featureType: "water",
-        elementType: "labels.text.stroke",
-        stylers: [{ color: "#17263c" }],
-    },
-];
+
 export const OberonStaly = [
     { elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
     { elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },
@@ -342,7 +259,88 @@ export const blueGreenMapStyles = [
         stylers: [{ color: "#ffffff" }],
     },
 ];
-export const mapaDefecto = [];
+export const mapaDefecto = [
+    {
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }]
+    }
+]
+export const darkMapStyles = [
+    { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+    { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+    { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+    {
+        featureType: "administrative",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#e6e6e6" }], // lineas de pais
+    },
+    {
+        featureType: "administrative.locality",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#ffffff" }],
+    },
+    {
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }]
+    },
+    {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ color: "#38414e" }], // calles
+    },
+    {
+        featureType: "road",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#212a37" }], // contorno calle
+    },
+    {
+        featureType: "road",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#9ca5b3" }], //texto de las calles
+    },
+    {
+        featureType: "road.highway",
+        elementType: "geometry",
+        stylers: [{ color: "#00e7ff" }], // vias principales
+    },
+    {
+        featureType: "road.highway",
+        elementType: "geometry.stroke",
+        stylers: [{ color: "#1f2835" }],
+    },
+    {
+        featureType: "road.highway",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#f3d19c" }],
+    },
+    {
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [{ color: "#2f3948" }],
+    },
+    {
+        featureType: "transit.station",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#d59563" }],
+    },
+    {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: "#071328" }], // agua mar
+    },
+    {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#515c6d" }],
+    },
+    {
+        featureType: "water",
+        elementType: "labels.text.stroke",
+        stylers: [{ color: "#17263c" }],
+    },
+];
 export const Primaria = {
     url: escudo,
 };

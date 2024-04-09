@@ -84,3 +84,17 @@ button.dark {
   outline: none;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
+
+.clusterText div {
+  color: #000;
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+  background-color: #ffffffb0 !important;
+  width: fit-content !important;
+  height: fit-content !important;
+  line-height: normal !important;
+  padding: 5px !important;
+  border-radius: 5px !important;
+  /* transform: translate(50%, -50%) !important; */
+}

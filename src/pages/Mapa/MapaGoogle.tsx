@@ -49,12 +49,15 @@ function MapaGoogle() {
   const [clienteSelected, setClienteSelected] = useState<null | IClienteResponse>(null);
   const [mapaCalor, setMapaCalor] = useState([]);
   const [riesgos, setRiesgos] = useState<TRiesgo[]>([]);
+  const [clusterShow, setClusterShow] = useState(false);
+  const [mapsLoader, setMapsLoader] = useState(true);
+
   const handleClienteChange = (cliente: IClienteResponse) => {
+    setClusterShow(false);
     if (clienteSelected?.CLIE_ID_REG === cliente.CLIE_ID_REG) {
       setClienteSelected(null);
       setUbicacionesShow(ubicaciones);
     } else {
-
       setClienteSelected(cliente);
       const ubicacionesFilter = ubicaciones.filter((ubicacion) => ubicacion.CLIUBIC_ID_CLIENTE === cliente.CLIE_ID_REG);
       setUbicacionesShow(ubicacionesFilter);
@@ -64,11 +67,6 @@ function MapaGoogle() {
 
   const handleMarkerClick = (marker: any) => {
     setSelectedMarker(marker);
-    setCenter({
-      lat: Number.parseFloat(marker.Latitud),
-      lng: Number.parseFloat(marker.Longitud),
-    });
-    // setZoomi(7);
   };
 
   const onLoad = useCallback((map: any) => {
@@ -78,11 +76,9 @@ function MapaGoogle() {
 
   const getData = async () => {
     const response = await UbicacionesClientes();
-    console.log(response);
     setUbicaciones(response.data);
     setUbicacionesShow(response.data);
     const responseClient = await getClients()
-    console.log(responseClient);
     let clientes = []
     if (responseClient.data.data.find((cliente: any) => cliente.CLIE_ID_REG === "34")) {
       clientes = responseClient.data.data
@@ -93,6 +89,9 @@ function MapaGoogle() {
       }, ...responseClient.data.data]
     }
     setClientes(clientes);
+    // setTimeout(() => {
+    //   setClusterShow(true);
+    // }, 300);
   }
 
   const getMapaCalor = new Promise((resolve, reject) => {
@@ -117,7 +116,7 @@ function MapaGoogle() {
     });
   }, []);
 
-  useEffect(() => { }, [ubicaciones, zoomi])
+  useEffect(() => { }, [ubicacionesShow, zoomi, clusterShow, mapsLoader])
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -129,7 +128,22 @@ function MapaGoogle() {
     setMap(null);
   }, []);
 
+  const clusterStyles = [
 
+    {
+      url: Primaria.url,
+      height: 80,
+      width: 80,
+
+      className: 'clusterText',
+    },
+    {
+      url: Primaria.url,
+      height: 100,
+      width: 100,
+      className: 'clusterText',
+    }
+  ]
   return isLoaded ? (
     <>
       <Notificaciones />
@@ -140,12 +154,14 @@ function MapaGoogle() {
         setRiesgosShow={setRiesgos}
       />
       <EtiquetaLateralLogoCli cliente={clienteSelected} />
-      <GoogleMap
+      {mapsLoader && <GoogleMap
+
         onLoad={onLoad}
         mapContainerStyle={containerStyle}
         center={center}
         onUnmount={onUnmount}
         zoom={zoomi}
+        clickableIcons={false}
         onZoomChanged={() => {
           if (mapRef.current) {
             const newZoom = mapRef.current.getZoom();
@@ -156,59 +172,67 @@ function MapaGoogle() {
           styles: theme === "light" ? mapaDefecto : darkMapStyles,
           zoomControl: true,
           minZoom: 6,
-
           zoomControlOptions: {
             position: window.google.maps.ControlPosition.RIGHT_CENTER,
           },
         }}
       >
-        <div>
-          {
-            ubicacionesShow.map((coordenada, index) => (
-              <div className="icono">
-                <Marker
-                  key={index}
-                  position={{
-                    lat: Number.parseFloat(coordenada.CLIUBIC_LATITUD),
-                    lng: Number.parseFloat(coordenada.CLIUBIC_LONGITUD),
-                  }}
-                  onMouseOver={() => handleMarkerClick(coordenada)}
-                  onMouseOut={() => setSelectedMarker(null)}
-                  icon={
-                    Primaria
-                  }
-                >
-                </Marker>
-              </div>
-            ))}
 
-          {riesgos.length > 0 && mapaCalor.map((coordenada: any, index) => (
-            <Marker
-              key={index}
-              position={{
-                lat: Number.parseFloat(`${coordenada.latitude}`),
-                lng: Number.parseFloat(`${coordenada.longitude}`),
+        {clusterShow ? (
+          <div>
+            <MarkerClusterer
+              options={{
+                imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                styles: clusterStyles,
+                gridSize: 50,
+                averageCenter: true
               }}
-              icon={{
-                url: ZonaCalor,
-                scaledSize: new window.google.maps.Size(
-                  (coordenada.intensity / 10) * zoomi,
-                  (coordenada.intensity / 10) * zoomi
-                ),
-                anchor: new window.google.maps.Point(
-                  ((coordenada.intensity / 10) * zoomi) / 2,
-                  ((coordenada.intensity / 10) * zoomi) / 2
-                ),
-                labelOrigin: new window.google.maps.Point(
-                  ((coordenada.intensity / 10) * zoomi) / 2,
-                  ((coordenada.intensity / 10) * zoomi) / 2
-                ),
-                //style: { filter: `blur(${zoomi}px)` },
-              }}
-            />
-          ))}
-          {selectedMarker && (
-            <>
+            >
+              {(clusterer) => (
+                <>
+                  {ubicacionesShow.map((coordenada, index) => (
+                    <Marker
+                      key={index}
+                      position={{
+                        lat: Number.parseFloat(coordenada.CLIUBIC_LATITUD),
+                        lng: Number.parseFloat(coordenada.CLIUBIC_LONGITUD),
+                      }}
+                      onMouseOver={() => handleMarkerClick(coordenada)}
+                      onMouseOut={() => setSelectedMarker(null)}
+                      clusterer={clusterer}
+                      icon={Primaria}
+                    />
+                  ))}
+
+                  {riesgos.length > 0 && mapaCalor.map((coordenada: any, index) => (
+                    <Marker
+                      key={index}
+                      position={{
+                        lat: Number.parseFloat(`${coordenada.latitude}`),
+                        lng: Number.parseFloat(`${coordenada.longitude}`),
+                      }}
+                      icon={{
+                        url: ZonaCalor,
+                        scaledSize: new window.google.maps.Size(
+                          (coordenada.intensity / 10) * zoomi,
+                          (coordenada.intensity / 10) * zoomi
+                        ),
+                        anchor: new window.google.maps.Point(
+                          ((coordenada.intensity / 10) * zoomi) / 2,
+                          ((coordenada.intensity / 10) * zoomi) / 2
+                        ),
+                        labelOrigin: new window.google.maps.Point(
+                          ((coordenada.intensity / 10) * zoomi) / 2,
+                          ((coordenada.intensity / 10) * zoomi) / 2
+                        ),
+                      }}
+                      clusterer={clusterer}
+                    />
+                  ))}
+                </>
+              )}
+            </MarkerClusterer>
+            {selectedMarker && (
               <InfoWindow
                 position={{
                   lat: Number.parseFloat(selectedMarker.CLIUBIC_LATITUD),
@@ -225,102 +249,79 @@ function MapaGoogle() {
                   <p>Longitud: <span>{selectedMarker.CLIUBIC_LONGITUD}</span> </p>
                 </div>
               </InfoWindow>
-            </>
-          )}
-        </div>
-      </GoogleMap>
-      {/* <GoogleMap
-        onLoad={onLoad}
-        mapContainerStyle={containerStyle}
-        center={center}
-        onUnmount={onUnmount}
-        zoom={zoomi}
-        onZoomChanged={() => {
-          if (mapRef.current) {
-            const newZoom = mapRef.current.getZoom();
-            setZoomi(newZoom);
-          }
-        }}
-        options={{
-          styles: theme === "light" ? mapaDefecto : darkMapStyles,
-          zoomControl: true,
-          minZoom: 6,
-          zoomControlOptions: {
-            position: window.google.maps.ControlPosition.RIGHT_CENTER,
-          },
-        }}
-      >
-        <MarkerClusterer
-          options={{
-            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-            gridSize: 50,
-            averageCenter: true
-          }}
-        >
-          {(clusterer) => (
-            <>
-              {ubicacionesShow.map((coordenada, index) => (
-                <Marker
-                  key={index}
-                  position={{
-                    lat: Number.parseFloat(coordenada.CLIUBIC_LATITUD),
-                    lng: Number.parseFloat(coordenada.CLIUBIC_LONGITUD),
-                  }}
-                  onMouseOver={() => handleMarkerClick(coordenada)}
-                  onMouseOut={() => setSelectedMarker(null)}
-                  clusterer={clusterer}
-                  icon={Primaria}
-                />
+            )}
+          </div>
+        ) : (
+          <div>
+            {
+              ubicacionesShow.map((coordenada, index) => (
+                <div className="icono">
+                  <Marker
+                    key={index}
+                    position={{
+                      lat: Number.parseFloat(coordenada.CLIUBIC_LATITUD),
+                      lng: Number.parseFloat(coordenada.CLIUBIC_LONGITUD),
+                    }}
+                    onMouseOver={() => handleMarkerClick(coordenada)}
+                    onMouseOut={() => setSelectedMarker(null)}
+                    icon={
+                      Primaria
+                    }
+                  >
+                  </Marker>
+                </div>
               ))}
 
-              {riesgos.length > 0 && mapaCalor.map((coordenada: any, index) => (
-                <Marker
-                  key={index}
+            {riesgos.length > 0 && mapaCalor.map((coordenada: any, index) => (
+              <Marker
+                key={index}
+                position={{
+                  lat: Number.parseFloat(`${coordenada.latitude}`),
+                  lng: Number.parseFloat(`${coordenada.longitude}`),
+                }}
+                icon={{
+                  url: ZonaCalor,
+                  scaledSize: new window.google.maps.Size(
+                    (coordenada.intensity / 10) * zoomi,
+                    (coordenada.intensity / 10) * zoomi
+                  ),
+                  anchor: new window.google.maps.Point(
+                    ((coordenada.intensity / 10) * zoomi) / 2,
+                    ((coordenada.intensity / 10) * zoomi) / 2
+                  ),
+                  labelOrigin: new window.google.maps.Point(
+                    ((coordenada.intensity / 10) * zoomi) / 2,
+                    ((coordenada.intensity / 10) * zoomi) / 2
+                  ),
+                  //style: { filter: `blur(${zoomi}px)` },
+                }}
+              />
+            ))}
+            {selectedMarker && (
+              <>
+                <InfoWindow
                   position={{
-                    lat: Number.parseFloat(`${coordenada.latitude}`),
-                    lng: Number.parseFloat(`${coordenada.longitude}`),
+                    lat: Number.parseFloat(selectedMarker.CLIUBIC_LATITUD),
+                    lng: Number.parseFloat(selectedMarker.CLIUBIC_LONGITUD),
                   }}
-                  icon={{
-                    url: ZonaCalor,
-                    scaledSize: new window.google.maps.Size(
-                      (coordenada.intensity / 10) * zoomi,
-                      (coordenada.intensity / 10) * zoomi
-                    ),
-                    anchor: new window.google.maps.Point(
-                      ((coordenada.intensity / 10) * zoomi) / 2,
-                      ((coordenada.intensity / 10) * zoomi) / 2
-                    ),
-                    labelOrigin: new window.google.maps.Point(
-                      ((coordenada.intensity / 10) * zoomi) / 2,
-                      ((coordenada.intensity / 10) * zoomi) / 2
-                    ),
-                  }}
-                  clusterer={clusterer}
-                />
-              ))}
-            </>
-          )}
-        </MarkerClusterer>
+                  onCloseClick={() => setSelectedMarker(null)}
+                >
+                  <div className="mapPopover" >
+                    <p>Ciente: <span>{selectedMarker.client.CLIE_COMERCIAL}</span></p>
+                    <p>Nombre: <span>{selectedMarker.CLIUBIC_NOMBRE}</span> </p>
+                    <p>Direccion: <span>{selectedMarker.CLIUBIC_DIRECCION}</span> </p>
 
-        {selectedMarker && (
-          <InfoWindow
-            position={{
-              lat: Number.parseFloat(selectedMarker.CLIUBIC_LATITUD),
-              lng: Number.parseFloat(selectedMarker.CLIUBIC_LONGITUD),
-            }}
-            onCloseClick={() => setSelectedMarker(null)}
-          >
-            <div className="mapPopover" >
-              <p>Ciente: <span>{selectedMarker.client.CLIE_COMERCIAL}</span></p>
-              <p>Nombre: <span>{selectedMarker.CLIUBIC_NOMBRE}</span> </p>
-              <p>Direccion: <span>{selectedMarker.CLIUBIC_DIRECCION}</span> </p>
+                    <p>Latitud: <span>{selectedMarker.CLIUBIC_LATITUD}</span> </p>
+                    <p>Longitud: <span>{selectedMarker.CLIUBIC_LONGITUD}</span> </p>
+                  </div>
+                </InfoWindow>
+              </>
+            )}
+          </div>)
+        }
 
-              <p>Latitud: <span>{selectedMarker.CLIUBIC_LATITUD}</span> </p>
-              <p>Longitud: <span>{selectedMarker.CLIUBIC_LONGITUD}</span> </p>
-            </div>
-          </InfoWindow>
-        )}
-      </GoogleMap> */}
+      </GoogleMap>}
+
 
       <div className="theme">
         {theme === "light" ? (
@@ -334,8 +335,6 @@ function MapaGoogle() {
         )}
       </div>
       <IndicadorFiltro />
-
-
     </>
   ) : (
     <></>
